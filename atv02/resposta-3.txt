@@ -1,0 +1,1 @@
+Eu prefiro usar o grid quando a tela é dividida, por exemplo: em uma tela de login onde na esquerda há apenas a logo e na direita o form do login, nesse caso eu prefiro utilizar o grid. Em casos mais "genéricos" eu costumo sempre usar o flex.
