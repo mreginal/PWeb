@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Consultar CEP</title>
+</head>
+<body>
+  <div class="card">
+    <h2>Consultar CEP</h2>
+    <input type="text" id="cep" placeholder="Digite o CEP" maxlength="8">
+    <button onclick="consultarCEP()">Consultar</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const consultarCEP = () => {
+      const cep = document.getElementById('cep').value;
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = '';
+
+      if (cep.length !== 8 || isNaN(cep)) {
+        resultDiv.innerHTML = '<p>Por favor, insira um CEP válido de 8 dígitos.</p>';
+        return;
+      }
+
+      fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(response => {
+          if (!response.ok) throw new Error('Erro ao consultar o CEP');
+          return response.json();
+        })
+        .then(data => {
+          if (data.erro) {
+            resultDiv.innerHTML = '<p>CEP não encontrado. Tente novamente.</p>';
+          } else {
+            resultDiv.innerHTML = `
+              <p><strong>Logradouro:</strong> ${data.logradouro}</p>
+              <p><strong>Bairro:</strong> ${data.bairro}</p>
+              <p><strong>Cidade:</strong> ${data.localidade}</p>
+              <p><strong>Estado:</strong> ${data.uf}</p>
+            `;
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          resultDiv.innerHTML = '<p>Ocorreu um erro ao consultar o CEP. Tente novamente.</p>';
+        });
+    };
+  </script>
+</body>
+</html>
